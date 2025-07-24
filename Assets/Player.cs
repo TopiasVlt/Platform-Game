@@ -8,19 +8,20 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
     public Transform groundCheck;
+    public Vector3 groundCheckSize = new Vector3(0.5f, 0.05f, 0);
     public LayerMask groundLayer;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
 
-    private Rigidbody2D rb;
-    private bool isGrounded;
+    private Rigidbody rb;
+  
     private int count;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         count = 0;
 
         SetCountText();
@@ -68,17 +69,34 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Jump()
-    
+    void Jump()          
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (isGrounded())
         {
 
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, 0);
-            isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, 0);
+                //isGrounded() = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
+            }
         }
     }
 
-    
-    
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawCube(groundCheck.position, groundCheckSize);
+    }
+
+   private bool isGrounded()
+    {
+        if (Physics.OverlapBox(center: groundCheck.position, groundCheckSize, Quaternion.identity, groundLayer))
+
+        {
+            return true;
+        }
+        return false;
+    }
 }
