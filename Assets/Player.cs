@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
+    public GameObject bullet;
+    public GameObject crosshair;
 
     private Rigidbody rb;
   
@@ -44,8 +46,15 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
         
         Jump();
-        Debug.Log("toka");
+      
+        // Shooting
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject myBullet = Instantiate(bullet, transform.position, Quaternion.identity);
+            myBullet.GetComponent<Bullet>().target = crosshair.transform.position;
+        }
     }
+    
 
     void MovePlayer()
     {
@@ -58,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("eka");
+       
         if (other.gameObject.CompareTag("PickUp"))
         {
            
