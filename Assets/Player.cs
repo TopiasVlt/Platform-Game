@@ -90,13 +90,22 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.DrawCube(groundCheck.position, groundCheckSize);
     }
 
-   private bool isGrounded()
+    bool isGrounded()
     {
-        if (Physics.OverlapBox(center: groundCheck.position, groundCheckSize, Quaternion.identity, groundLayer))
+        //Debug.DrawRay(transform.position, Vector3.down, Color.magenta);
 
+        LayerMask layerMask = LayerMask.GetMask("Ground");
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f, layerMask))
         {
+            
             return true;
         }
-        return false;
+        else
+        {
+            
+            return false;
+        }
     }
 }
+
